@@ -3,7 +3,7 @@
 ### 1. Clone or download this repository
 
 ```
-git clone --branch django-tailwind-minimal https://github.com/prakashtaz0091/Fee-Payment-System.git your-project-name
+git clone https://github.com/prakashtaz0091/Fee-Payment-System.git
 
 ```
 
