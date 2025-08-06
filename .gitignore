@@ -14,3 +14,4 @@ static/css/src/**/*
 static/css/dist/**/*
 node_modules
 env
+media

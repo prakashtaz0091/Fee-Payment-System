@@ -7,7 +7,7 @@ class SchoolAdminLoginForm(forms.Form):
     username = forms.CharField(
         widget=forms.TextInput(
             attrs={
-                "class": "input w-full p-2 border border-gray-800",
+                "class": "input w-full p-2 mb-2",
                 "placeholder": "Username",
             }
         )
@@ -15,7 +15,7 @@ class SchoolAdminLoginForm(forms.Form):
     password = forms.CharField(
         widget=forms.PasswordInput(
             attrs={
-                "class": "input w-full p-2 border border-gray-800",
+                "class": "input w-full p-2 mb-2",
                 "placeholder": "Password",
             }
         )
@@ -27,7 +27,7 @@ class SchoolAdminRegisterForm(forms.Form):
         max_length=50,
         widget=forms.TextInput(
             attrs={
-                "class": "input w-full p-2 border border-gray-800",
+                "class": "input w-full p-2 mb-2",
                 "placeholder": "Username",
             }
         ),
@@ -35,7 +35,7 @@ class SchoolAdminRegisterForm(forms.Form):
     email = forms.EmailField(
         widget=forms.EmailInput(
             attrs={
-                "class": "input w-full p-2 border border-gray-800",
+                "class": "input w-full p-2 mb-2",
                 "placeholder": "Email",
             }
         )
@@ -43,7 +43,7 @@ class SchoolAdminRegisterForm(forms.Form):
     password1 = forms.CharField(
         widget=forms.PasswordInput(
             attrs={
-                "class": "input w-full p-2 border border-gray-800",
+                "class": "input w-full p-2 mb-2",
                 "placeholder": "Password",
             }
         )
@@ -51,7 +51,7 @@ class SchoolAdminRegisterForm(forms.Form):
     password2 = forms.CharField(
         widget=forms.PasswordInput(
             attrs={
-                "class": "input w-full p-2 border border-gray-800",
+                "class": "input w-full p-2 mb-2",
                 "placeholder": "Confirm Password",
             }
         )
@@ -60,7 +60,7 @@ class SchoolAdminRegisterForm(forms.Form):
         max_length=50,
         widget=forms.TextInput(
             attrs={
-                "class": "input w-full p-2 border border-gray-800",
+                "class": "input w-full p-2 mb-2",
                 "placeholder": "First Name",
             }
         ),
@@ -69,7 +69,7 @@ class SchoolAdminRegisterForm(forms.Form):
         max_length=50,
         widget=forms.TextInput(
             attrs={
-                "class": "input w-full p-2 border border-gray-800",
+                "class": "input w-full p-2 mb-2",
                 "placeholder": "Last Name",
             }
         ),
@@ -78,7 +78,7 @@ class SchoolAdminRegisterForm(forms.Form):
         max_length=10,
         widget=forms.TextInput(
             attrs={
-                "class": "input w-full p-2 border border-gray-800",
+                "class": "input w-full p-2 mb-2",
                 "placeholder": "Phone",
             }
         ),
@@ -87,17 +87,17 @@ class SchoolAdminRegisterForm(forms.Form):
         max_length=255,
         widget=forms.TextInput(
             attrs={
-                "class": "input w-full p-2 border border-gray-800",
+                "class": "input w-full p-2 mb-2",
                 "placeholder": "Address",
             }
         ),
     )
     profile_pic = forms.ImageField(
-        widget=forms.ClearableFileInput(attrs={"class": "input-file"}), required=False
+        widget=forms.ClearableFileInput(attrs={"class": "file-input w-full p-2"}),
+        required=False,
     )
 
     def clean(self):
-        print(self.cleaned_data["password1"], self.cleaned_data["password2"])
         if self.cleaned_data["password1"] != self.cleaned_data["password2"]:
             raise forms.ValidationError("Passwords do not match")
 

@@ -7,23 +7,41 @@
 
 {% block content %}
 <div class="w-full flex justify-center p-4">
-    <form class="w-1/2 flex flex-col p-4 " method="post"
-        style="width: 600px; border: 1px solid #ccc; border-radius: 8px;">
+
+    <div class="toast toast-end toast-top">
+        {% for error in form.non_field_errors %}
+        <div class="alert alert-error alert-soft">
+            <span>{{error}}</span>
+        </div>
+        {% endfor %}
+    </div>
+    <form class="w-1/2 flex flex-col p-4 " method="post" enctype="multipart/form-data">
         {% csrf_token %}
 
-        <h1 class="text-3xl font-bold mb-4">Register as a School</h1>
-        {{ form.non_field_errors }}
-        {% for field in form %}
+        <fieldset class="fieldset bg-base-200 border-base-300 rounded-box border p-4 text-sm md:text-lg shadow-md ">
+            <legend class="fieldset-legend text-2xl">Register</legend>
 
-        <fieldset class="fieldset mb-4">
-            <legend class="fieldset-legend">{{field.label}}</legend>
+
+            {% for field in form %}
+
+
+            <label class="label">{{field.label}}</label>
             {{field}}
-            {{field.errors}}
+
+            {% for error in field.errors %}
+            <div class="text-red-600 text-sm">
+                <span>{{error}}</span>
+            </div>
+            {% endfor %}
+
+            {% endfor %}
+
+
+
+
+            <button class="btn btn-neutral mt-4">Register</button>
         </fieldset>
 
-        {% endfor %}
-
-        <button class="btn btn-primary" type="submit">Register</button>
     </form>
 </div>
 <!-- Your page content here -->

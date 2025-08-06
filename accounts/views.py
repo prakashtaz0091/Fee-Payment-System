@@ -4,7 +4,7 @@ from .forms import SchoolAdminRegisterForm, SchoolAdminLoginForm
 
 def school_admin_register(request):
     if request.method == "POST":
-        form = SchoolAdminRegisterForm(request.POST)
+        form = SchoolAdminRegisterForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return redirect("accounts:school_admin_login")
