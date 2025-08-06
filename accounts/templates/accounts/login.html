@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+
+{% block sidebar %}
+{% endblock %}
+
+
+{% block content %}
+<div class="w-full flex justify-center align-center p-4">
+    <form class="w-1/2 flex flex-col p-4 " method="post"
+        style="width: 600px; border: 1px solid #ccc; border-radius: 8px; height: fit-content;">
+        {% csrf_token %}
+
+        <h1 class="text-3xl font-bold mb-4">LOGIN</h1>
+
+        {% for field in form %}
+
+        <fieldset class="fieldset mb-4">
+            <legend class="fieldset-legend">{{field.label}}</legend>
+            {{field}}
+            {{field.errors}}
+        </fieldset>
+
+        {% endfor %}
+
+        <button class="btn btn-primary" type="submit">Login</button>
+    </form>
+</div>
+<!-- Your page content here -->
+{% endblock %}

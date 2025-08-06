@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+
+{% block sidebar %}
+{% endblock %}
+
+
+{% block content %}
+<div class="w-full flex justify-center p-4">
+    <form class="w-1/2 flex flex-col p-4 " method="post"
+        style="width: 600px; border: 1px solid #ccc; border-radius: 8px;">
+        {% csrf_token %}
+
+        <h1 class="text-3xl font-bold mb-4">Register as a School</h1>
+        {{ form.non_field_errors }}
+        {% for field in form %}
+
+        <fieldset class="fieldset mb-4">
+            <legend class="fieldset-legend">{{field.label}}</legend>
+            {{field}}
+            {{field.errors}}
+        </fieldset>
+
+        {% endfor %}
+
+        <button class="btn btn-primary" type="submit">Register</button>
+    </form>
+</div>
+<!-- Your page content here -->
+{% endblock %}
