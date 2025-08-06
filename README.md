@@ -1,6 +1,4 @@
-## A simple base setup for Django and Tailwind
-
-## To start project with this base setup, do the following:
+## To run the project, follow these steps
 
 ### 1. Clone or download this repository
 
