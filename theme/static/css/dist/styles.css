@@ -940,9 +940,6 @@
       border-inline-start: var(--border) solid color-mix(in oklab, currentColor 10%, #0000);
     }
   }
-  .mt-2 {
-    margin-top: calc(var(--spacing) * 2);
-  }
   .mt-4 {
     margin-top: calc(var(--spacing) * 4);
   }

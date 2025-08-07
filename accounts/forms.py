@@ -101,6 +101,9 @@ class SchoolAdminRegisterForm(forms.Form):
         if self.cleaned_data["password1"] != self.cleaned_data["password2"]:
             raise forms.ValidationError("Passwords do not match")
 
+        if CustomUser.objects.filter(username=self.cleaned_data["username"]).exists():
+            raise forms.ValidationError("Username already exists")
+
     def save(self, commit=True):
         user = CustomUser(
             username=self.cleaned_data["username"],
