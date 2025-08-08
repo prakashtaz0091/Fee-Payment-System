@@ -11,7 +11,7 @@ class AccountsMiddleware:
             "/accounts/login/",
             "/accounts/register/",
         )
-        print("request path", request.path)
+        # print("request path", request.path)
         if request.user.is_authenticated and request.path in restricted_paths:
             return redirect("app:dashboard")
 

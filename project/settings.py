@@ -123,3 +123,12 @@ MEDIA_ROOT = BASE_DIR / "media"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "accounts.CustomUser"
+
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "localhost"  # MailHog's SMTP server is usually hosted on localhost
+EMAIL_PORT = 1025  # MailHog's default SMTP port
+EMAIL_USE_TLS = False  # MailHog doesn't use TLS by default
+EMAIL_HOST_USER = ""  # No authentication needed for MailHog
+EMAIL_HOST_PASSWORD = ""  # No password required
+DEFAULT_FROM_EMAIL = "fee-payment-system@localhost"  # Default sender email
