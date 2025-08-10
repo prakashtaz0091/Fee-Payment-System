@@ -61,7 +61,7 @@ def forgot_password(request):
             return redirect("accounts:forgot_password")
 
         print(email, "Email sent successfully")
-
+        messages.success(request, "Email sent successfully. Please check your inbox")
         return redirect("accounts:otp_confirmation")
 
     return render(request, "accounts/forgot-password.html")
@@ -104,6 +104,7 @@ def set_new_password(request, user_id=None):
 
             user.set_password(password1)
             user.save()
+            messages.success(request, "Password changed successfully")
             return redirect("accounts:school_admin_login")
 
     return render(request, "accounts/new-password.html")
