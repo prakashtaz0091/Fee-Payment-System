@@ -30,6 +30,8 @@ INSTALLED_APPS = [
     "app",
     "accounts",
     "background_task",
+    "common",
+    "school",
 ]
 
 TAILWIND_APP_NAME = "theme"
@@ -133,3 +135,6 @@ EMAIL_USE_TLS = False  # MailHog doesn't use TLS by default
 EMAIL_HOST_USER = ""  # No authentication needed for MailHog
 EMAIL_HOST_PASSWORD = ""  # No password required
 DEFAULT_FROM_EMAIL = "fee-payment-system@localhost"  # Default sender email
+
+
+MAX_ATTEMPTS = 3

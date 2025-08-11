@@ -1,10 +1,15 @@
 {% extends 'base.html' %}
+{% load form_extras %}
+
 
 {% block content %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Chart.js CDN -->
 
+{% if request.user.school %}
 <!-- Main content -->
 <main class="flex-grow p-6 overflow-auto">
+
+
     <h1 class="text-3xl font-bold mb-6">Dashboard</h1>
 
     <!-- Summary Cards -->
@@ -87,4 +92,38 @@
         }
     });
 </script>
+{% else %}
+<main class="flex p-6 flex flex-col items-center overflow-auto">
+    <h1 class="text-3xl font-bold mb-6">Welcome to the dashboard! Please register your school to get started.</h1>
+
+    <ul>
+        {% for error in form.non_field_errors %}
+        <li class="text-red-500 text-sm">{{ error }}</li>
+        {% endfor %}
+    </ul>
+    <!-- registration form  -->
+    <form action="{% url 'school:school_register' %}" method="post" enctype="multipart/form-data"
+        class="flex justify-center flex-wrap gap-4 p-6">
+        {% csrf_token %}
+
+        {% for field in form %}
+
+        <fieldset class="fieldset mb-2">
+            <label class="label text-xl" for="{{ field.id_for_label }}">{{field.label}}</label>
+            {{ field|add_class:"input p-3 mb-4 min-w-[400px] max-w-[500px]" }}
+
+            <ul>
+                {% for error in field.errors %}
+                <li class="text-red-500 text-sm">{{ error }}</li>
+                {% endfor %}
+            </ul>
+
+        </fieldset>
+        {% endfor %}
+
+
+        <button type="submit" class="btn btn-primary w-full max-w-[60vw]">Register</button>
+    </form>
+</main>
+{% endif %}
 {% endblock content %}
