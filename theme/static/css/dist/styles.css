@@ -7,6 +7,7 @@
       "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
+    --color-red-500: oklch(63.7% 0.237 25.331);
     --color-red-600: oklch(57.7% 0.245 27.325);
     --color-green-600: oklch(62.7% 0.194 149.214);
     --color-blue-500: oklch(62.3% 0.214 259.815);
@@ -898,6 +899,9 @@
       --btn-fg: color-mix(in oklch, var(--color-base-content) 20%, #0000);
     }
   }
+  .m-1 {
+    margin: calc(var(--spacing) * 1);
+  }
   .filter {
     display: flex;
     flex-wrap: wrap;
@@ -982,6 +986,12 @@
   .mt-4 {
     margin-top: calc(var(--spacing) * 4);
   }
+  .mt-6 {
+    margin-top: calc(var(--spacing) * 6);
+  }
+  .mt-12 {
+    margin-top: calc(var(--spacing) * 12);
+  }
   .mt-\[100px\] {
     margin-top: 100px;
   }
@@ -994,6 +1004,9 @@
     padding-block: calc(0.25rem * 2);
     color: var(--color-base-content);
     font-weight: 600;
+  }
+  .mb-1 {
+    margin-bottom: calc(var(--spacing) * 1);
   }
   .mb-2 {
     margin-bottom: calc(var(--spacing) * 2);
@@ -1140,20 +1153,29 @@
   .w-64 {
     width: calc(var(--spacing) * 64);
   }
+  .w-\[60vw\] {
+    width: 60vw;
+  }
+  .w-\[70vw\] {
+    width: 70vw;
+  }
+  .w-\[80vw\] {
+    width: 80vw;
+  }
   .w-full {
     width: 100%;
   }
   .max-w-\[60vw\] {
     max-width: 60vw;
   }
-  .max-w-\[80vw\] {
-    max-width: 80vw;
-  }
   .max-w-\[500px\] {
     max-width: 500px;
   }
   .max-w-md {
     max-width: var(--container-md);
+  }
+  .min-w-\[300px\] {
+    min-width: 300px;
   }
   .min-w-\[400px\] {
     min-width: 400px;
@@ -1191,6 +1213,9 @@
   .items-center {
     align-items: center;
   }
+  .justify-between {
+    justify-content: space-between;
+  }
   .justify-center {
     justify-content: center;
   }
@@ -1202,6 +1227,12 @@
   }
   .gap-8 {
     gap: calc(var(--spacing) * 8);
+  }
+  .gap-12 {
+    gap: calc(var(--spacing) * 12);
+  }
+  .gap-20 {
+    gap: calc(var(--spacing) * 20);
   }
   :where(.space-y-2 > :not(:last-child)) {
     --tw-space-y-reverse: 0;
@@ -1237,6 +1268,11 @@
     color: var(--color-error-content);
     --alert-color: var(--color-error);
   }
+  .alert-success {
+    border-color: var(--color-success);
+    color: var(--color-success-content);
+    --alert-color: var(--color-success);
+  }
   .border-base-300 {
     border-color: var(--color-base-300);
   }
@@ -1245,6 +1281,9 @@
   }
   .bg-base-200 {
     background-color: var(--color-base-200);
+  }
+  .p-0 {
+    padding: calc(var(--spacing) * 0);
   }
   .p-2 {
     padding: calc(var(--spacing) * 2);
@@ -1294,6 +1333,9 @@
   }
   .text-primary {
     color: var(--color-primary);
+  }
+  .text-red-500 {
+    color: var(--color-red-500);
   }
   .text-red-600 {
     color: var(--color-red-600);
