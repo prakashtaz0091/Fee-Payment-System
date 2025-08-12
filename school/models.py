@@ -20,12 +20,7 @@ class School(models.Model):
     state = models.CharField(max_length=100, blank=True, null=True)
     country = models.CharField(max_length=100)
     postal_code = models.CharField(max_length=20, blank=True, null=True)
-    latitude = models.DecimalField(
-        max_digits=20, decimal_places=13, blank=True, null=True
-    )
-    longitude = models.DecimalField(
-        max_digits=20, decimal_places=13, blank=True, null=True
-    )
+    map_location_url = models.URLField(blank=True, null=True)
 
     principal_name = models.CharField(max_length=255, blank=True, null=True)
     established_date = models.DateField(blank=True, null=True)

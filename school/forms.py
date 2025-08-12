@@ -20,18 +20,23 @@ class SchoolForm(forms.ModelForm):
             "theme_color": forms.TextInput(attrs={"type": "color"}),
         }
 
-    def save(self, commit=True, request=None, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop("request") if "request" in kwargs else None
+        super().__init__(*args, **kwargs)
+
+    def save(self, commit=True, *args, **kwargs):
         school = super(SchoolForm, self).save(commit=False, *args, **kwargs)
 
-        school.admin_user = request.user
+        if self.request:
+            school.admin_user = self.request.user
 
-        school_name = self.cleaned_data.get("name")
-        school_name_words = school_name.split(" ")
-        estd_year = self.cleaned_data.get("established_date").year
-        code = "".join([word[0] for word in school_name_words]) + f"-{estd_year}"
-
-        school.code = code
-        school.slug = slugify(school_name)
+        if not school.code:
+            school_name = self.cleaned_data.get("name")
+            school_name_words = school_name.split(" ")
+            estd_year = self.cleaned_data.get("established_date").year
+            code = "".join([word[0] for word in school_name_words]) + f"-{estd_year}"
+            school.code = code
+            school.slug = slugify(school_name)
 
         if commit:
             school.save()
