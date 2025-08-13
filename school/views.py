@@ -1,16 +1,16 @@
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_POST, require_GET
 from django.contrib.auth.decorators import login_required
-from school.forms import SchoolForm
+from school.forms import SchoolForm, GradeForm
 from django.urls import reverse_lazy
 
 
 @require_POST
 def school_register(request):
     form_data = request.POST
-    form = SchoolForm(form_data, request.FILES)
+    form = SchoolForm(form_data, request.FILES, request=request)
     if form.is_valid():
-        form.save(request=request)
+        form.save()
         return redirect("school:school_profile")
 
     return render(request, "app/dashboard.html", {"form": form})
@@ -48,3 +48,14 @@ def school_update(request):
     context = {"form": form, "form_submission_url": form_submission_url}
 
     return render(request, "school/update-school-info.html", context)
+
+
+def grade(request):
+    if request.method == "POST":
+        form = GradeForm(request.POST, request=request)
+        if form.is_valid():
+            form.save()
+            # return redirect("school:grade")
+
+    form = GradeForm()
+    return render(request, "school/grade-form.html", {"form": form})

@@ -17,7 +17,6 @@
     --color-black: #000;
     --color-white: #fff;
     --spacing: 0.25rem;
-    --container-sm: 24rem;
     --container-md: 28rem;
     --container-5xl: 64rem;
     --text-sm: 0.875rem;
@@ -514,6 +513,57 @@
     --btn-color: var(--color-primary);
     --btn-fg: var(--color-primary-content);
     isolation: isolate;
+  }
+  .list {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.875rem;
+  }
+  .list :where(.list-row) {
+    --list-grid-cols: minmax(0, auto) 1fr;
+    position: relative;
+    display: grid;
+    grid-auto-flow: column;
+    gap: calc(0.25rem * 4);
+    border-radius: var(--radius-box);
+    padding: calc(0.25rem * 4);
+    word-break: break-word;
+    grid-template-columns: var(--list-grid-cols);
+  }
+  .list :where(.list-row):has(.list-col-grow:nth-child(1)) {
+    --list-grid-cols: 1fr;
+  }
+  .list :where(.list-row):has(.list-col-grow:nth-child(2)) {
+    --list-grid-cols: minmax(0, auto) 1fr;
+  }
+  .list :where(.list-row):has(.list-col-grow:nth-child(3)) {
+    --list-grid-cols: minmax(0, auto) minmax(0, auto) 1fr;
+  }
+  .list :where(.list-row):has(.list-col-grow:nth-child(4)) {
+    --list-grid-cols: minmax(0, auto) minmax(0, auto) minmax(0, auto) 1fr;
+  }
+  .list :where(.list-row):has(.list-col-grow:nth-child(5)) {
+    --list-grid-cols: minmax(0, auto) minmax(0, auto) minmax(0, auto) minmax(0, auto) 1fr;
+  }
+  .list :where(.list-row):has(.list-col-grow:nth-child(6)) {
+    --list-grid-cols: minmax(0, auto) minmax(0, auto) minmax(0, auto) minmax(0, auto)
+        minmax(0, auto) 1fr;
+  }
+  .list :where(.list-row) :not(.list-col-wrap) {
+    grid-row-start: 1;
+  }
+  .list > :not(:last-child).list-row:after, .list > :not(:last-child) .list-row:after {
+    content: "";
+    border-bottom: var(--border) solid;
+    inset-inline: var(--radius-box);
+    position: absolute;
+    bottom: calc(0.25rem * 0);
+    border-color: var(--color-base-content);
+  }
+  @supports (color: color-mix(in lab, red, red)) {
+    .list > :not(:last-child).list-row:after, .list > :not(:last-child) .list-row:after {
+      border-color: color-mix(in oklab, var(--color-base-content) 5%, transparent);
+    }
   }
   .toast {
     position: fixed;
@@ -1213,11 +1263,11 @@
   .max-w-5xl {
     max-width: var(--container-5xl);
   }
+  .max-w-\[500px\] {
+    max-width: 500px;
+  }
   .max-w-md {
     max-width: var(--container-md);
-  }
-  .max-w-sm {
-    max-width: var(--container-sm);
   }
   .min-w-\[300px\] {
     min-width: 300px;
@@ -1272,6 +1322,9 @@
   }
   .gap-8 {
     gap: calc(var(--spacing) * 8);
+  }
+  .gap-12 {
+    gap: calc(var(--spacing) * 12);
   }
   .gap-20 {
     gap: calc(var(--spacing) * 20);

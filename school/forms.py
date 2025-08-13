@@ -1,5 +1,5 @@
 from django import forms
-from school.models import School
+from school.models import School, Grade
 from django.utils.text import slugify
 
 
@@ -42,3 +42,22 @@ class SchoolForm(forms.ModelForm):
             school.save()
 
         return school
+
+
+class GradeForm(forms.ModelForm):
+    class Meta:
+        model = Grade
+        fields = ["name"]
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop("request") if "request" in kwargs else None
+        super().__init__(*args, **kwargs)
+
+    def save(self, commit=True, *args, **kwargs):
+        grade = super(GradeForm, self).save(commit=False, *args, **kwargs)
+        grade.school = self.request.user.school
+
+        if commit:
+            grade.save()
+
+        return grade

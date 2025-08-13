@@ -36,3 +36,26 @@ class School(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Grade(models.Model):
+    name = models.CharField(max_length=100)
+    school = models.ForeignKey(School, on_delete=models.CASCADE, related_name="classes")
+
+    class Meta:
+        unique_together = ("name", "school")
+
+    def __str__(self):
+        return f"{self.name} | {self.school}"
+
+
+class Fee(models.Model):
+    name = models.CharField(max_length=150)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)  # eg. 1,00,00,000.00
+    grade = models.ForeignKey(Grade, on_delete=models.CASCADE, related_name="fees")
+
+    class Meta:
+        unique_together = ("name", "grade")
+
+    def __str__(self):
+        return f"{self.name} | {self.grade}"

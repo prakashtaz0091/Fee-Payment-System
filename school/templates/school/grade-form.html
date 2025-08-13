@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load form_extras %}
+
+
+{% block title %}
+Class
+{% endblock title %}
+
+{% block content %}
+
+<main class=" min-h-screen flex flex-col  gap-5 p-6 w-full">
+    <h1 class="text-3xl font-bold mb-4">Add Grades</h1>
+    <div class="flex  gap-12">
+        <form id="add-class-form" action="" method="post" class="flex-grow max-w-[500px]">
+            {% csrf_token %}
+            <fieldset class="fieldset mb-1">
+                <label class="label text-xl" for="{{ form.name.id_for_label }}">{{form.name.label}}</label>
+                {{ form.name|add_class:"input p-3 mb-1 min-w-[300px] w-full" }}
+
+                <ul>
+                    {% for error in form.name.errors %}
+                    <li class="text-red-500 text-sm">{{ error }}</li>
+                    {% endfor %}
+                </ul>
+
+            </fieldset>
+            <button type="submit" class="btn btn-primary">Add Class</button>
+        </form>
+        <div>
+            <h1 class="text-2xl font-bold mb-4">Grades List</h1>
+            <hr>
+            <div class="flex flex-col">
+                <p>Class 10</p>
+
+            </div>
+
+        </div>
+    </div>
+</main>
+
+<script>
+
+    document
+        .getElementById("add-class-form")
+        .addEventListener("submit", function (e) {
+            e.preventDefault(); // Prevent the form from submitting normally, which would cause a page reload
+
+            const formData = new FormData(this); // this means, current target html element,which is in this case is our add-class-form
+
+            const csrf_token = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+
+
+
+            fetch("{% url 'school:grade' %}", {
+                method: "POST",
+                headers: { "X-CSRFToken": csrf_token },
+                body: formData,
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.success) {
+                        alert(data.message);
+                    } else {
+                        alert("Error: " + JSON.stringify(data.errors));
+                    }
+                })
+                .catch((err) => console.error(err));
+        });
+
+</script>
+
+{% endblock content %}

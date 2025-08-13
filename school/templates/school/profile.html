@@ -10,7 +10,7 @@ Profile
 
 <main class=" min-h-screen flex  justify-center gap-5 p-6 w-full">
 
-    <div class="w-full max-w-5xl shadow-light shadow-lg rounded-xl overflow-hidden ">
+    <div class="w-full max-w-5xl shadow-light shadow-lg rounded-xl ">
         <!-- Banner -->
         <div class="relative h-48 ">
 
@@ -133,20 +133,37 @@ Profile
         <a class="btn btn-primary w-full" href="{% url 'school:school_update' %}">Update School Information</a>
 
     </div>
-    <div class="max-w-sm h-fit rounded-xl shadow-lg overflow-hidden">
-        <div class="flex items-center p-4">
-            <img src="{{admin.profile_pic.url}}" alt="User Profile"
-                class="w-16 h-16 rounded-full object-cover border-2 border-blue-500">
-            <div class="ml-4">
-                <h3 class="text-lg font-bold text-base-500">{{admin.get_full_name}}</h3>
-                <p class="text-sm text-gray-500">Administrator</p>
-                <p class="text-sm text-gray-600 mt-1">{{admin.email}}</p>
+    <div class="flex flex-col gap-6">
+        <div class=" h-fit rounded-xl shadow-lg overflow-hidden">
+            <div class="flex items-center p-4">
+                <img src="{{admin.profile_pic.url}}" alt="User Profile"
+                    class="w-16 h-16 rounded-full object-cover border-2 border-blue-500">
+                <div class="ml-4">
+                    <h3 class="text-lg font-bold text-base-500">{{admin.get_full_name}}</h3>
+                    <p class="text-sm text-gray-500">Administrator</p>
+                    <p class="text-sm text-gray-600 mt-1">{{admin.email}}</p>
+                </div>
+            </div>
+            <div class="px-4 pb-4">
+                <a class="btn btn-outline btn-sm w-full mb-3" href="{% url 'accounts:logout_view' %}">
+                    Logout
+                </a>
             </div>
         </div>
-        <div class="px-4 pb-4">
-            <a class="btn btn-outline btn-sm w-full mb-3" href="{% url 'accounts:logout_view' %}">
-                Logout
-            </a>
+        <div class=" h-fit rounded-xl shadow-lg overflow-hidden">
+            <div class="flex flex-col items-center p-4">
+
+                <h3 class="text-lg font-bold text-base-500 mb-8">School Configuration</h3>
+                <hr>
+
+                <a class="btn btn-outline btn-sm w-full mb-3" href="{% url 'school:grade' %}">
+                    Configure Classes
+                </a>
+                <a class="btn btn-outline btn-sm w-full mb-3" href="{% url 'accounts:logout_view' %}">
+                    Configure Fees
+                </a>
+
+            </div>
         </div>
     </div>
 
