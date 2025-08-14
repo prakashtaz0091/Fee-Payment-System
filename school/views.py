@@ -3,6 +3,9 @@ from django.views.decorators.http import require_POST, require_GET
 from django.contrib.auth.decorators import login_required
 from school.forms import SchoolForm, GradeForm
 from django.urls import reverse_lazy
+from django.http import JsonResponse
+from django.db import IntegrityError
+from django.core import serializers
 
 
 @require_POST
@@ -54,8 +57,25 @@ def grade(request):
     if request.method == "POST":
         form = GradeForm(request.POST, request=request)
         if form.is_valid():
-            form.save()
-            # return redirect("school:grade")
+            try:
+                saved_grade = form.save()
+            except IntegrityError:
+                return JsonResponse(
+                    {"success": False, "message": "Grade already exists."}
+                )
+            else:
+                saved_grade_dict = {"id": saved_grade.id, "name": saved_grade.name}
+                return JsonResponse(
+                    {
+                        "success": True,
+                        "message": "Grade added successfully.",
+                        "data": saved_grade_dict,
+                    }
+                )
 
     form = GradeForm()
-    return render(request, "school/grade-form.html", {"form": form})
+    grades_list = request.user.school.classes.all()
+
+    context = {"form": form, "grades_list": grades_list}
+
+    return render(request, "school/grade-form.html", context)

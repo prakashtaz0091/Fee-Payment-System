@@ -514,57 +514,6 @@
     --btn-fg: var(--color-primary-content);
     isolation: isolate;
   }
-  .list {
-    display: flex;
-    flex-direction: column;
-    font-size: 0.875rem;
-  }
-  .list :where(.list-row) {
-    --list-grid-cols: minmax(0, auto) 1fr;
-    position: relative;
-    display: grid;
-    grid-auto-flow: column;
-    gap: calc(0.25rem * 4);
-    border-radius: var(--radius-box);
-    padding: calc(0.25rem * 4);
-    word-break: break-word;
-    grid-template-columns: var(--list-grid-cols);
-  }
-  .list :where(.list-row):has(.list-col-grow:nth-child(1)) {
-    --list-grid-cols: 1fr;
-  }
-  .list :where(.list-row):has(.list-col-grow:nth-child(2)) {
-    --list-grid-cols: minmax(0, auto) 1fr;
-  }
-  .list :where(.list-row):has(.list-col-grow:nth-child(3)) {
-    --list-grid-cols: minmax(0, auto) minmax(0, auto) 1fr;
-  }
-  .list :where(.list-row):has(.list-col-grow:nth-child(4)) {
-    --list-grid-cols: minmax(0, auto) minmax(0, auto) minmax(0, auto) 1fr;
-  }
-  .list :where(.list-row):has(.list-col-grow:nth-child(5)) {
-    --list-grid-cols: minmax(0, auto) minmax(0, auto) minmax(0, auto) minmax(0, auto) 1fr;
-  }
-  .list :where(.list-row):has(.list-col-grow:nth-child(6)) {
-    --list-grid-cols: minmax(0, auto) minmax(0, auto) minmax(0, auto) minmax(0, auto)
-        minmax(0, auto) 1fr;
-  }
-  .list :where(.list-row) :not(.list-col-wrap) {
-    grid-row-start: 1;
-  }
-  .list > :not(:last-child).list-row:after, .list > :not(:last-child) .list-row:after {
-    content: "";
-    border-bottom: var(--border) solid;
-    inset-inline: var(--radius-box);
-    position: absolute;
-    bottom: calc(0.25rem * 0);
-    border-color: var(--color-base-content);
-  }
-  @supports (color: color-mix(in lab, red, red)) {
-    .list > :not(:last-child).list-row:after, .list > :not(:last-child) .list-row:after {
-      border-color: color-mix(in oklab, var(--color-base-content) 5%, transparent);
-    }
-  }
   .toast {
     position: fixed;
     inset-inline-start: auto;
@@ -727,6 +676,73 @@
   .input::-webkit-calendar-picker-indicator {
     position: absolute;
     inset-inline-end: 0.75em;
+  }
+  .table {
+    font-size: 0.875rem;
+    position: relative;
+    width: 100%;
+    border-radius: var(--radius-box);
+    text-align: left;
+  }
+  .table:where(:dir(rtl), [dir="rtl"], [dir="rtl"] *) {
+    text-align: right;
+  }
+  @media (hover: hover) {
+    .table tr.row-hover:hover, .table tr.row-hover:nth-child(even):hover {
+      background-color: var(--color-base-200);
+    }
+  }
+  .table :where(th, td) {
+    padding-inline: calc(0.25rem * 4);
+    padding-block: calc(0.25rem * 3);
+    vertical-align: middle;
+  }
+  .table :where(thead, tfoot) {
+    white-space: nowrap;
+    color: var(--color-base-content);
+  }
+  @supports (color: color-mix(in lab, red, red)) {
+    .table :where(thead, tfoot) {
+      color: color-mix(in oklab, var(--color-base-content) 60%, transparent);
+    }
+  }
+  .table :where(thead, tfoot) {
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+  .table :where(tfoot) {
+    border-top: var(--border) solid var(--color-base-content);
+  }
+  @supports (color: color-mix(in lab, red, red)) {
+    .table :where(tfoot) {
+      border-top: var(--border) solid color-mix(in oklch, var(--color-base-content) 5%, #0000);
+    }
+  }
+  .table :where(.table-pin-rows thead tr) {
+    position: sticky;
+    top: calc(0.25rem * 0);
+    z-index: 1;
+    background-color: var(--color-base-100);
+  }
+  .table :where(.table-pin-rows tfoot tr) {
+    position: sticky;
+    bottom: calc(0.25rem * 0);
+    z-index: 1;
+    background-color: var(--color-base-100);
+  }
+  .table :where(.table-pin-cols tr th) {
+    position: sticky;
+    right: calc(0.25rem * 0);
+    left: calc(0.25rem * 0);
+    background-color: var(--color-base-100);
+  }
+  .table :where(thead tr, tbody tr:not(:last-child)) {
+    border-bottom: var(--border) solid var(--color-base-content);
+  }
+  @supports (color: color-mix(in lab, red, red)) {
+    .table :where(thead tr, tbody tr:not(:last-child)) {
+      border-bottom: var(--border) solid color-mix(in oklch, var(--color-base-content) 5%, #0000);
+    }
   }
   .card {
     position: relative;
@@ -1212,6 +1228,9 @@
   .grid {
     display: grid;
   }
+  .table {
+    display: table;
+  }
   .h-6 {
     height: calc(var(--spacing) * 6);
   }
@@ -1340,6 +1359,9 @@
   .overflow-hidden {
     overflow: hidden;
   }
+  .overflow-x-auto {
+    overflow-x: auto;
+  }
   .rounded-box {
     border-radius: var(--radius-box);
   }
@@ -1387,6 +1409,14 @@
   }
   .border-base-300 {
     border-color: var(--color-base-300);
+  }
+  .border-base-content\/5 {
+    border-color: var(--color-base-content);
+  }
+  @supports (color: color-mix(in lab, red, red)) {
+    .border-base-content\/5 {
+      border-color: color-mix(in oklab, var(--color-base-content) 5%, transparent);
+    }
   }
   .border-blue-500 {
     border-color: var(--color-blue-500);
