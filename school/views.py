@@ -6,6 +6,7 @@ from django.urls import reverse_lazy
 from django.http import JsonResponse
 from django.db import IntegrityError
 from django.core import serializers
+from school.models import Grade
 
 
 @require_POST
@@ -79,3 +80,12 @@ def grade(request):
     context = {"form": form, "grades_list": grades_list}
 
     return render(request, "school/grade-form.html", context)
+
+
+def grade_delete(request, pk):
+    try:
+        Grade.objects.get(id=pk).delete()
+    except Grade.DoesNotExist:
+        return JsonResponse({"success": False, "message": "Grade doesn't exist."})
+    else:
+        return JsonResponse({"success": True, "message": "Grade deleted successfully."})

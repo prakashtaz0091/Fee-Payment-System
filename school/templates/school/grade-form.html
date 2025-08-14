@@ -42,10 +42,18 @@ Class
 
                         {% for grade in grades_list %}
                         <!-- row -->
-                        <tr>
+                        <tr id="grade-{{grade.id}}">
                             <th>{{ forloop.counter }}</th>
                             <td>{{ grade.name }}</td>
-                            <td>Update | Delete</td>
+                            <td>
+                                <div class="flex gap-2">
+                                    <button class="btn btn-sm btn-primary">Update</button>
+                                    <button data-grade-id="{{grade.id}}" class="btn btn-sm btn-error"
+                                        onclick="delete_grade(this)">Delete</button>
+
+                                </div>
+
+                            </td>
                         </tr>
 
                         {% endfor %}
@@ -59,6 +67,30 @@ Class
 </main>
 
 <script>
+
+    function remove_grade_from_table(grade_id) {
+        const row_id_to_be_deleted = `grade-${grade_id}`
+        const row_to_be_deleted = document.getElementById(row_id_to_be_deleted)
+        row_to_be_deleted.remove()
+
+    }
+
+    function delete_grade(btnElement) {
+        const grade_id = btnElement.dataset.gradeId
+
+        fetch("{% url 'school:grade_delete' 'dummy' %}".replace('dummy', grade_id))
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.success) {
+                    show_toast_message(data.message, success = true)
+                    remove_grade_from_table(grade_id)
+                } else {
+                    show_toast_message(`Error: ${data.message}`, success = false)
+                }
+            })
+            .catch((err) => console.error(err));
+
+    }
 
     function show_toast_message(message, success = true) {
         const mainDiv = document.getElementById("main")
@@ -79,10 +111,19 @@ Class
         const table_body = document.getElementById("grade-list");
         const rows_count = table_body.children.length
         const table_row = document.createElement("tr")
+        table_row.id = `grade-${grade.id}`
+
         table_row.innerHTML = `
                             <th>${rows_count + 1}</th>
                             <td>${grade.name}</td>
-                            <td>Update | Delete</td>
+                            <td>
+                                <div class="flex gap-2">
+                                    <button class="btn btn-sm btn-primary">Update</button>
+                                    <button data-grade-id="${grade.id}" class="btn btn-sm btn-error"
+                                        onclick="delete_grade(this)">Delete</button>
+
+                                </div>    
+                            </td>
             `
 
         table_body.appendChild(table_row)
