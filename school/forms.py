@@ -1,5 +1,5 @@
 from django import forms
-from school.models import School, Grade
+from school.models import School, Grade, Fee
 from django.utils.text import slugify
 
 
@@ -61,3 +61,18 @@ class GradeForm(forms.ModelForm):
             grade.save()
 
         return grade
+
+
+class FeeForm(forms.ModelForm):
+    class Meta:
+        model = Fee
+        fields = ["name", "amount", "grade"]
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop("request") if "request" in kwargs else None
+        super().__init__(*args, **kwargs)
+
+        if self.request:
+            self.fields["grade"].queryset = Grade.objects.filter(
+                school__admin_user__id=self.request.user.id
+            )

@@ -9,61 +9,77 @@ Class
 {% block content %}
 
 <main class=" min-h-screen flex flex-col  gap-5 p-6 w-full" id="main">
-    <h1 class="text-3xl font-bold mb-4">Add Grades</h1>
-    <div class="flex  gap-12">
-        <form id="add-class-form" action="" method="post" class="flex-grow max-w-[500px]">
-            {% csrf_token %}
-            <fieldset class="fieldset mb-1">
-                <label class="label text-xl" for="{{ form.name.id_for_label }}">{{form.name.label}}</label>
-                {{ form.name|add_class:"input p-3 mb-1 min-w-[300px] w-full" }}
 
-                <ul>
-                    {% for error in form.name.errors %}
-                    <li class="text-red-500 text-sm">{{ error }}</li>
-                    {% endfor %}
-                </ul>
-
-            </fieldset>
-            <button type="submit" class="btn btn-primary">Add Class</button>
-        </form>
-        <div class="flex-grow">
-            <h1 class="text-2xl font-bold mb-4">Grades List</h1>
-            <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
-                <table class="table">
-                    <!-- head -->
-                    <thead>
-                        <tr>
-                            <th>SN</th>
-                            <th>Grade Name</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="grade-list">
-
-                        {% for grade in grades_list %}
-                        <!-- row -->
-                        <tr id="grade-{{grade.id}}">
-                            <th>{{ forloop.counter }}</th>
-                            <td>{{ grade.name }}</td>
-                            <td>
-                                <div class="flex gap-2">
-                                    <button class="btn btn-sm btn-primary">Update</button>
-                                    <button data-grade-id="{{grade.id}}" class="btn btn-sm btn-error"
-                                        onclick="delete_grade(this)">Delete</button>
-
-                                </div>
-
-                            </td>
-                        </tr>
-
-                        {% endfor %}
-
-                    </tbody>
-                </table>
+    <div class="toast toast-end toast-top">
+        {% for message in messages %}
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+        <div class="alert alert-error alert-soft">
+            {% else %}
+            <div class="alert alert-success alert-soft">
+                {% endif %}
+                <span>{{message}}</span>
             </div>
-
+            {% endfor %}
         </div>
-    </div>
+
+
+
+        <h1 class="text-3xl font-bold mb-4">Add Grades</h1>
+        <div class="flex  gap-12">
+            <form id="add-class-form" action="" method="post" class="flex-grow max-w-[500px]">
+                {% csrf_token %}
+                <fieldset class="fieldset mb-1">
+                    <label class="label text-xl" for="{{ form.name.id_for_label }}">{{form.name.label}}</label>
+                    {{ form.name|add_class:"input p-3 mb-1 min-w-[300px] w-full" }}
+
+                    <ul>
+                        {% for error in form.name.errors %}
+                        <li class="text-red-500 text-sm">{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+
+                </fieldset>
+                <button type="submit" class="btn btn-primary">Add Class</button>
+            </form>
+            <div class="flex-grow">
+                <h1 class="text-2xl font-bold mb-4">Grades List</h1>
+                <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
+                    <table class="table">
+                        <!-- head -->
+                        <thead>
+                            <tr>
+                                <th>SN</th>
+                                <th>Grade Name</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="grade-list">
+
+                            {% for grade in grades_list %}
+                            <!-- row -->
+                            <tr id="grade-{{grade.id}}">
+                                <th>{{ forloop.counter }}</th>
+                                <td>{{ grade.name }}</td>
+                                <td>
+                                    <div class="flex gap-2">
+                                        <a href="{% url 'school:grade_update' grade.id %}"
+                                            class="btn btn-sm btn-primary">Update</a>
+                                        <button data-grade-id="{{grade.id}}" class="btn btn-sm btn-error"
+                                            onclick="delete_grade(this)">Delete</button>
+
+                                    </div>
+
+                                </td>
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
 </main>
 
 <script>

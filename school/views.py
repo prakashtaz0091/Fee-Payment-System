@@ -5,8 +5,8 @@ from school.forms import SchoolForm, GradeForm
 from django.urls import reverse_lazy
 from django.http import JsonResponse
 from django.db import IntegrityError
-from django.core import serializers
 from school.models import Grade
+from django.contrib import messages
 
 
 @require_POST
@@ -79,7 +79,7 @@ def grade(request):
 
     context = {"form": form, "grades_list": grades_list}
 
-    return render(request, "school/grade-form.html", context)
+    return render(request, "school/grade-create-form.html", context)
 
 
 def grade_delete(request, pk):
@@ -89,3 +89,26 @@ def grade_delete(request, pk):
         return JsonResponse({"success": False, "message": "Grade doesn't exist."})
     else:
         return JsonResponse({"success": True, "message": "Grade deleted successfully."})
+
+
+def grade_update(request, pk):
+    try:
+        grade = Grade.objects.get(pk=pk)
+    except Grade.DoesNotExist:
+        messages.error(request, "Grade does not exist")
+        return redirect("school:grade")
+
+    if request.method == "POST":
+        form = GradeForm(request.POST, instance=grade, request=request)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Grade updated successfully")
+            return redirect("school:grade")
+
+        messages.error(request, "Failed to update grade")
+        return redirect("school:grade")
+
+    else:
+        form = GradeForm(instance=grade, request=request)
+        context = {"form": form}
+        return render(request, "school/grade-update-form.html", context)

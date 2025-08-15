@@ -9,4 +9,5 @@ urlpatterns = [
     path("update/", views.school_update, name="school_update"),
     path("grade/", views.grade, name="grade"),
     path("grade/<pk>/delete/", views.grade_delete, name="grade_delete"),
+    path("grade/<pk>/update/", views.grade_update, name="grade_update"),
 ]
