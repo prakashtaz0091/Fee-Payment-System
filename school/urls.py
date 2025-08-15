@@ -10,4 +10,7 @@ urlpatterns = [
     path("grade/", views.grade, name="grade"),
     path("grade/<pk>/delete/", views.grade_delete, name="grade_delete"),
     path("grade/<pk>/update/", views.grade_update, name="grade_update"),
+    path("fee/", views.fee, name="fee"),
+    path("fee/<pk>/delete/", views.fee_delete, name="fee_delete"),
+    path("fee/<pk>/update/", views.fee_update, name="fee_update"),
 ]

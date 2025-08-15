@@ -1,12 +1,14 @@
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_POST, require_GET
 from django.contrib.auth.decorators import login_required
-from school.forms import SchoolForm, GradeForm
+from school.forms import SchoolForm, GradeForm, FeeForm
 from django.urls import reverse_lazy
 from django.http import JsonResponse
 from django.db import IntegrityError
-from school.models import Grade
+from school.models import Grade, Fee
 from django.contrib import messages
+from django.urls import reverse
+from urllib.parse import urlencode
 
 
 @require_POST
@@ -112,3 +114,79 @@ def grade_update(request, pk):
         form = GradeForm(instance=grade, request=request)
         context = {"form": form}
         return render(request, "school/grade-update-form.html", context)
+
+
+def fee(request):
+    if request.method == "POST":
+        grade_id = request.POST.get("grade_id")
+        try:
+            grade = Grade.objects.get(id=grade_id)
+        except Grade.DoesNotExist:
+            return JsonResponse({"success": False, "message": "Grade does not exist."})
+
+        form = FeeForm(request.POST)
+        if form.is_valid():
+            try:
+                saved_fee = form.save(grade=grade)
+            except IntegrityError:
+                return JsonResponse(
+                    {"success": False, "message": "Fee already exists."}
+                )
+
+            reponse = {
+                "success": True,
+                "message": "Fee added successfully.",
+                "data": {
+                    "id": saved_fee.id,
+                    "name": saved_fee.name,
+                    "amount": saved_fee.amount,
+                },
+            }
+            return JsonResponse(reponse)
+
+    grade_id = request.GET.get("grade_id")
+    try:
+        grade = Grade.objects.get(id=grade_id)
+        fees = grade.fees.all()
+    except Grade.DoesNotExist:
+        messages.error(request, "Grade does not exist")
+        return redirect("school:grade")
+
+    form = FeeForm()
+    context = {"form": form, "grade": grade, "fees": fees}
+    return render(request, "school/fee-create.html", context)
+
+
+def fee_delete(request, pk):
+    try:
+        Fee.objects.get(id=pk).delete()
+    except Fee.DoesNotExist:
+        return JsonResponse({"success": False, "message": "Fee doesn't exist."})
+    else:
+        return JsonResponse({"success": True, "message": "Fee deleted successfully."})
+
+
+def fee_update(request, pk):
+    try:
+        fee = Fee.objects.get(pk=pk)
+        base_url = reverse("school:fee")
+        query_string = urlencode({"grade_id": fee.grade.id})
+        url = f"{base_url}?{query_string}"
+    except Fee.DoesNotExist:
+        messages.error(request, "fee does not exist")
+        return redirect(url)
+
+    if request.method == "POST":
+        form = FeeForm(request.POST, instance=fee)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "fee updated successfully")
+            return redirect(url)
+
+        messages.error(request, "Failed to update fee")
+        return redirect(url)
+
+    else:
+        form = FeeForm(instance=fee)
+        context = {"form": form}
+        return render(request, "school/fee-update.html", context)

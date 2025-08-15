@@ -66,13 +66,15 @@ class GradeForm(forms.ModelForm):
 class FeeForm(forms.ModelForm):
     class Meta:
         model = Fee
-        fields = ["name", "amount", "grade"]
+        fields = ["name", "amount"]
 
-    def __init__(self, *args, **kwargs):
-        self.request = kwargs.pop("request") if "request" in kwargs else None
-        super().__init__(*args, **kwargs)
+    def save(self, commit=True, *args, **kwargs):
+        grade = kwargs.pop("grade", None)
+        fee = super(FeeForm, self).save(commit=False, *args, **kwargs)
+        if grade is not None:
+            fee.grade = grade
 
-        if self.request:
-            self.fields["grade"].queryset = Grade.objects.filter(
-                school__admin_user__id=self.request.user.id
-            )
+        if commit:
+            fee.save()
+
+        return fee
