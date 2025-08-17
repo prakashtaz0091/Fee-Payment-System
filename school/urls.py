@@ -13,4 +13,6 @@ urlpatterns = [
     path("fee/", views.fee, name="fee"),
     path("fee/<pk>/delete/", views.fee_delete, name="fee_delete"),
     path("fee/<pk>/update/", views.fee_update, name="fee_update"),
+    path("students/", views.students, name="students"),
+    path("students/csv-upload/", views.upload_students_csv, name="upload_students_csv"),
 ]

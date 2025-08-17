@@ -23,7 +23,8 @@
         <nav class="flex-grow p-4">
             <ul class="menu menu-vertical space-y-2">
                 <li><a href="{% url 'app:dashboard' %}" class="rounded-md">Dashboard</a></li>
-                <li><a href="#" class="rounded-md">Students</a></li>
+                <li><a href="{% url 'school:grade' %}" class="rounded-md">Classes</a></li>
+                <li><a href="{% url 'school:students' %}" class="rounded-md">Students</a></li>
                 <li><a href="#" class="rounded-md">Reports</a></li>
             </ul>
         </nav>

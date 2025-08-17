@@ -1,14 +1,23 @@
-from django.shortcuts import render, redirect
-from django.views.decorators.http import require_POST, require_GET
-from django.contrib.auth.decorators import login_required
-from school.forms import SchoolForm, GradeForm, FeeForm
-from django.urls import reverse_lazy
-from django.http import JsonResponse
-from django.db import IntegrityError
-from school.models import Grade, Fee
-from django.contrib import messages
-from django.urls import reverse
 from urllib.parse import urlencode
+
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.db import IntegrityError
+from django.http import JsonResponse
+from django.shortcuts import redirect, render
+from django.urls import reverse, reverse_lazy
+from django.views.decorators.http import require_GET, require_POST
+
+from accounts.models import CustomUser
+from school.forms import (
+    FeeForm,
+    GradeForm,
+    SchoolForm,
+    StudentBulkRegisterForm,
+    StudentRegistrationForm,
+)
+from school.models import Fee, Grade, TempCSVFile
+from school.background_tasks import bulk_create_students_from_csv
 
 
 @require_POST
@@ -190,3 +199,34 @@ def fee_update(request, pk):
         form = FeeForm(instance=fee)
         context = {"form": form}
         return render(request, "school/fee-update.html", context)
+
+
+def students(request):
+    if request.method == "POST":
+        form = StudentRegistrationForm(request.POST, request.FILES, request=request)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Student registered successfully!")
+            return redirect("student_register")
+    else:
+        form = StudentRegistrationForm(request=request)
+        csv_form = StudentBulkRegisterForm(request=request)
+
+    students = CustomUser.objects.filter(role=CustomUser.Roles.STUDENT)
+    context = {"form": form, "students": students, "csv_form": csv_form}
+
+    return render(request, "school/students.html", context)
+
+
+def upload_students_csv(request):
+    if request.method == "POST":
+        form = StudentBulkRegisterForm(request.POST, request.FILES, request=request)
+        if form.is_valid():
+            saved_file = TempCSVFile.objects.create(file=request.FILES["csv_file"])
+            bulk_create_students_from_csv(
+                saved_file.id, request.POST.get("grade", None)
+            )
+            messages.success(request, "Students registered successfully!")
+            return redirect("school:students")
+
+    return redirect("school:students")

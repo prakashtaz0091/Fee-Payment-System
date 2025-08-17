@@ -59,3 +59,14 @@ class Fee(models.Model):
 
     def __str__(self):
         return f"{self.name} | {self.grade}"
+
+
+class TempCSVFile(models.Model):
+    file = models.FileField(upload_to="temp_csv_files/")
+
+    def __str__(self):
+        return self.file.name
+
+    def delete(self, *args, **kwargs):
+        self.file.delete()  # Delete actual file
+        super().delete(*args, **kwargs)  # Delete database record

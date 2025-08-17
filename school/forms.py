@@ -1,6 +1,10 @@
 from django import forms
 from school.models import School, Grade, Fee
 from django.utils.text import slugify
+from django.contrib.auth import get_user_model
+
+
+CustomUser = get_user_model()
 
 
 class SchoolForm(forms.ModelForm):
@@ -78,3 +82,57 @@ class FeeForm(forms.ModelForm):
             fee.save()
 
         return fee
+
+
+class StudentRegistrationForm(forms.ModelForm):
+    password = forms.CharField(
+        widget=forms.PasswordInput,
+        required=True,
+        help_text="Set an initial password for the student.",
+    )
+    grade = forms.ModelChoiceField(queryset=Grade.objects.none())
+
+    class Meta:
+        model = CustomUser
+        fields = [
+            "first_name",
+            "last_name",
+            "grade",
+            "email",
+            "phone_number",
+            "address",
+            "password",
+        ]
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop("request") if "request" in kwargs else None
+        super().__init__(*args, **kwargs)
+        self.fields["grade"].queryset = Grade.objects.filter(
+            school=self.request.user.school
+        )
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.role = CustomUser.Roles.STUDENT  # enforce role
+        user.set_password(self.cleaned_data["password"])  # hash password
+        if commit:
+            user.save()
+        return user
+
+
+class StudentBulkRegisterForm(forms.Form):
+    csv_file = forms.FileField(
+        label="CSV File",
+        help_text="Upload a CSV file containing student data.",
+        required=True,
+        widget=forms.FileInput(attrs={"accept": ".csv"}),
+    )
+    grade = forms.ModelChoiceField(queryset=Grade.objects.none())
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop("request") if "request" in kwargs else None
+        super().__init__(*args, **kwargs)
+
+        self.fields["grade"].queryset = Grade.objects.filter(
+            school=self.request.user.school
+        )
