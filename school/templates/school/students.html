@@ -103,7 +103,7 @@ Students
                     </thead>
                     <tbody id="student-list">
 
-                        {% for student in students %}
+                        {% for student in page_obj %}
                         <!-- row -->
                         <tr id="">
                             <th>{{ forloop.counter }}</th>
@@ -125,6 +125,21 @@ Students
 
                     </tbody>
                 </table>
+                <div class="join border border-base-content/5 flex justify-end">
+                    {% if page_obj.has_previous %}
+                    <a href="?page=1" class="join-item btn">First</a>
+                    <a href="?page={{ page_obj.previous_page_number }}" class="join-item btn">«</a>
+                    {% endif %}
+
+                    <button class="join-item btn">
+                        Page {{ page_obj.number }} of {{page_obj.paginator.num_pages}}
+                    </button>
+
+                    {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}" class="join-item btn">»</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}" class="join-item btn">Last</a>
+                    {% endif %}
+                </div>
             </div>
         </div>
 
