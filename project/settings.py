@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     "background_task",
     "common",
     "school",
+    "django_filters",
 ]
 
 TAILWIND_APP_NAME = "theme"
