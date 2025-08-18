@@ -70,6 +70,25 @@ Students
 
         <!-- Right Section (Student List) -->
         <div class=" flex-grow  shadow rounded-2xl p-6">
+            <form action="" method="get" class="flex gap-2 items-baseline">
+                {% for field in filter_form %}
+                <fieldset class="fieldset mb-2">
+                    <legend class="fieldset-legend text-sm font-medium ">
+                        {{ field.label }}
+                    </legend>
+                    {{ field|add_class:"input input-bordered input-sm" }}
+                    {% if field.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ field.errors|striptags }}</p>
+                    {% endif %}
+                </fieldset>
+                {% endfor %}
+
+                <button type="submit" class=" btn btn-sm btn-primary">
+                    Filter
+                </button>
+                <button class="btn btn-sm btn-error" type="reset">Reset</button>
+            </form>
+
             <h2 class="text-xl font-semibold mb-4">Students List</h2>
             <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
                 <table class="table">

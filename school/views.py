@@ -18,6 +18,7 @@ from school.forms import (
 )
 from school.models import Fee, Grade, TempCSVFile
 from school.background_tasks import bulk_create_students_from_csv
+from school.filters import StudentFilter
 
 
 @require_POST
@@ -212,8 +213,18 @@ def students(request):
         form = StudentRegistrationForm(request=request)
         csv_form = StudentBulkRegisterForm(request=request)
 
-    students = CustomUser.objects.filter(role=CustomUser.Roles.STUDENT)
-    context = {"form": form, "students": students, "csv_form": csv_form}
+    all_students = CustomUser.objects.filter(
+        role=CustomUser.Roles.STUDENT,
+        grade__isnull=False,
+        grade__school=request.user.school,
+    )
+    filtered_students = StudentFilter(request.GET, queryset=all_students)
+    context = {
+        "form": form,
+        "students": filtered_students.qs,
+        "csv_form": csv_form,
+        "filter_form": filtered_students.form,
+    }
 
     return render(request, "school/students.html", context)
 
