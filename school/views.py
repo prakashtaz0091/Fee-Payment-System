@@ -19,6 +19,7 @@ from school.forms import (
 from school.models import Fee, Grade, TempCSVFile
 from school.background_tasks import bulk_create_students_from_csv
 from school.filters import StudentFilter
+from django.core.paginator import Paginator
 
 
 @require_POST
@@ -219,11 +220,19 @@ def students(request):
         grade__school=request.user.school,
     )
     filtered_students = StudentFilter(request.GET, queryset=all_students)
+
+    paginator = Paginator(
+        filtered_students.qs, 10
+    )  # Show 10 students records per page.
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
     context = {
         "form": form,
         "students": filtered_students.qs,
         "csv_form": csv_form,
         "filter_form": filtered_students.form,
+        "page_obj": page_obj,
     }
 
     return render(request, "school/students.html", context)

@@ -1184,6 +1184,13 @@
       border-inline-start: var(--border) solid color-mix(in oklab, currentColor 10%, #0000);
     }
   }
+  .join-item:where(*:not(:first-child, :disabled, [disabled], .btn-disabled)) {
+    margin-inline-start: calc(var(--border, 1px) * -1);
+    margin-block-start: 0;
+  }
+  .join-item:where(*:is(:disabled, [disabled], .btn-disabled)) {
+    border-width: var(--border, 1px) 0 var(--border, 1px) var(--border, 1px);
+  }
   .mt-1 {
     margin-top: calc(var(--spacing) * 1);
   }
@@ -1339,6 +1346,62 @@
     grid-template-columns: 1fr;
     grid-auto-rows: max-content;
   }
+  .join {
+    display: inline-flex;
+    align-items: stretch;
+    --join-ss: 0;
+    --join-se: 0;
+    --join-es: 0;
+    --join-ee: 0;
+  }
+  .join :where(.join-item) {
+    border-start-start-radius: var(--join-ss, 0);
+    border-start-end-radius: var(--join-se, 0);
+    border-end-start-radius: var(--join-es, 0);
+    border-end-end-radius: var(--join-ee, 0);
+  }
+  .join :where(.join-item) * {
+    --join-ss: var(--radius-field);
+    --join-se: var(--radius-field);
+    --join-es: var(--radius-field);
+    --join-ee: var(--radius-field);
+  }
+  .join > .join-item:where(:first-child) {
+    --join-ss: var(--radius-field);
+    --join-se: 0;
+    --join-es: var(--radius-field);
+    --join-ee: 0;
+  }
+  .join :first-child:not(:last-child) :where(.join-item) {
+    --join-ss: var(--radius-field);
+    --join-se: 0;
+    --join-es: var(--radius-field);
+    --join-ee: 0;
+  }
+  .join > .join-item:where(:last-child) {
+    --join-ss: 0;
+    --join-se: var(--radius-field);
+    --join-es: 0;
+    --join-ee: var(--radius-field);
+  }
+  .join :last-child:not(:first-child) :where(.join-item) {
+    --join-ss: 0;
+    --join-se: var(--radius-field);
+    --join-es: 0;
+    --join-ee: var(--radius-field);
+  }
+  .join > .join-item:where(:only-child) {
+    --join-ss: var(--radius-field);
+    --join-se: var(--radius-field);
+    --join-es: var(--radius-field);
+    --join-ee: var(--radius-field);
+  }
+  .join :only-child :where(.join-item) {
+    --join-ss: var(--radius-field);
+    --join-se: var(--radius-field);
+    --join-es: var(--radius-field);
+    --join-ee: var(--radius-field);
+  }
   .block {
     display: block;
   }
@@ -1458,6 +1521,9 @@
   }
   .justify-center {
     justify-content: center;
+  }
+  .justify-end {
+    justify-content: flex-end;
   }
   .gap-2 {
     gap: calc(var(--spacing) * 2);
