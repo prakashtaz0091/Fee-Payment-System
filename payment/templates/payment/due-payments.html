@@ -13,8 +13,20 @@ Fee Due
         <h1 class="text-3xl font-bold mb-6 text-center">
             💰 Fee Due: Rs. {{ due_fee }}
         </h1>
+
+
         <p class="text-md font-semibold mb-6 ">Total Fee: Rs. {{ grade_fee }}</p>
 
+
+        <form action="{% url 'payment:payment' %}" method="post" class="flex gap-2 items-baseline">
+            {% csrf_token %}
+            <fieldset class="fieldset mb-4">
+                <legend class="fieldset-legend text-xl">Amount in Rs.</legend>
+                <input type="number" name="amount" id="amount" value="{{ due_fee }}" class="input input-bordered w-full"
+                    required>
+            </fieldset>
+            <button type="submit" class="btn btn-primary">Make Payment</button>
+        </form>
         <div
             class="bg-base-100 rounded-xl p-6 font-mono text-md line-height-relaxed whitespace-pre-line leading-relaxed">
             {{ fee_structure|linebreaksbr }}
