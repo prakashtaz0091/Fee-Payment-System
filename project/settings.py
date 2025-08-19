@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     "common",
     "school",
     "django_filters",
+    "payment",
 ]
 
 TAILWIND_APP_NAME = "theme"
