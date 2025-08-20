@@ -9,9 +9,13 @@ Fee Due
 
 {% block content %}
 <main class="min-h-screen w-full flex flex-col items-center p-8 bg-base-100">
-    <h1 class="text-3xl font-bold  mb-6 text-center">
-        💰 Transactions
-    </h1>
+    <div class="flex gap-6">
+
+        <h1 class="text-3xl font-bold  mb-6 text-center">
+            💰 Transactions
+        </h1>
+        <a href="{% url 'app:student_page' %}" class="btn btn-sm btn-primary">Home</a>
+    </div>
     <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
         <table class="table w-full">
             <!-- head -->
@@ -20,7 +24,11 @@ Fee Due
                     <th>SN</th>
                     <th>Name</th>
                     <th>Amount (Rs.)</th>
-                    <th>Date</th>
+
+                    <th>Student</th>
+                    <th>Status</th>
+
+                    <th>Payment Completed At</th>
                 </tr>
             </thead>
             <tbody>
@@ -29,7 +37,10 @@ Fee Due
                     <th>{{ forloop.counter }}</th>
                     <td>{{ transaction.name }}</td>
                     <td>{{ transaction.amount }}</td>
-                    <td>{{ transaction.created_at }}</td>
+                    <td>{{ transaction.student.get_full_name }}</td>
+                    <td class="{% if transaction.status != 'SUCCESS' %} line-through {% endif %} ">
+                        {{ transaction.status}}</td>
+                    <td>{{ transaction.updated_at }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

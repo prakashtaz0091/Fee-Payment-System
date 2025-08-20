@@ -13,12 +13,8 @@
     --color-blue-500: oklch(62.3% 0.214 259.815);
     --color-blue-600: oklch(54.6% 0.245 262.881);
     --color-indigo-600: oklch(51.1% 0.262 276.966);
-    --color-gray-50: oklch(98.5% 0.002 247.839);
-    --color-gray-100: oklch(96.7% 0.003 264.542);
     --color-gray-500: oklch(55.1% 0.027 264.364);
     --color-gray-600: oklch(44.6% 0.03 256.802);
-    --color-gray-700: oklch(37.3% 0.034 259.733);
-    --color-gray-800: oklch(27.8% 0.033 256.848);
     --color-black: #000;
     --color-white: #fff;
     --spacing: 0.25rem;
@@ -1521,9 +1517,6 @@
   .max-w-6xl {
     max-width: var(--container-6xl);
   }
-  .max-w-\[150px\] {
-    max-width: 150px;
-  }
   .max-w-\[500px\] {
     max-width: 500px;
   }
@@ -1687,14 +1680,11 @@
   .bg-base-200 {
     background-color: var(--color-base-200);
   }
-  .bg-gray-50 {
-    background-color: var(--color-gray-50);
+  .bg-error {
+    background-color: var(--color-error);
   }
-  .bg-gray-100 {
-    background-color: var(--color-gray-100);
-  }
-  .bg-white {
-    background-color: var(--color-white);
+  .bg-success {
+    background-color: var(--color-success);
   }
   .bg-gradient-to-r {
     --tw-gradient-position: to right in oklab;
@@ -1725,13 +1715,6 @@
   }
   .p-8 {
     padding: calc(var(--spacing) * 8);
-  }
-  .table-xs :not(thead, tfoot) tr {
-    font-size: 0.6875rem;
-  }
-  .table-xs :where(th, td) {
-    padding-inline: calc(0.25rem * 2);
-    padding-block: calc(0.25rem * 1);
   }
   .px-4 {
     padding-inline: calc(var(--spacing) * 4);
@@ -1787,12 +1770,6 @@
     --tw-font-weight: var(--font-weight-semibold);
     font-weight: var(--font-weight-semibold);
   }
-  .break-words {
-    overflow-wrap: break-word;
-  }
-  .whitespace-nowrap {
-    white-space: nowrap;
-  }
   .whitespace-pre-line {
     white-space: pre-line;
   }
@@ -1816,12 +1793,6 @@
   .text-gray-600 {
     color: var(--color-gray-600);
   }
-  .text-gray-700 {
-    color: var(--color-gray-700);
-  }
-  .text-gray-800 {
-    color: var(--color-gray-800);
-  }
   .text-green-600 {
     color: var(--color-green-600);
   }
@@ -1839,6 +1810,9 @@
   }
   .text-white {
     color: var(--color-white);
+  }
+  .line-through {
+    text-decoration-line: line-through;
   }
   .shadow {
     --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 1px 2px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
@@ -1914,15 +1888,6 @@
   @media (width >= 40rem) {
     .sm\:grid-cols-2 {
       grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-  @media (width >= 40rem) {
-    .sm\:table-xs :not(thead, tfoot) tr {
-      font-size: 0.6875rem;
-    }
-    .sm\:table-xs :where(th, td) {
-      padding-inline: calc(0.25rem * 2);
-      padding-block: calc(0.25rem * 1);
     }
   }
   @media (width >= 48rem) {

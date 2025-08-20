@@ -9,6 +9,14 @@ Fee Due
 
 {% block content %}
 <main class="min-h-screen w-full flex flex-col items-center p-8 bg-base-100">
+    <div class="toast toast-end toast-top">
+        {% for message in messages %}
+        <div class="alert alert-error alert-soft">
+            <span>{{message}}</span>
+        </div>
+        {% endfor %}
+    </div>
+
     <div class="w-full flex flex-col items-center max-w-3xl shadow-lg rounded-2xl p-8">
         <h1 class="text-3xl font-bold mb-6 text-center">
             💰 Fee Due: Rs. {{ due_fee }}

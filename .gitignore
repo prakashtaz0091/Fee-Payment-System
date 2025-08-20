@@ -15,3 +15,4 @@ static/css/dist/**/*
 node_modules
 env
 media
+.env

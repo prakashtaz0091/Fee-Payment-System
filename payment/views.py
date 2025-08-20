@@ -6,10 +6,12 @@ import requests
 import json
 from django.urls import reverse
 from payment.models import Payment
+from django.contrib import messages
+from django.conf import settings
 
 
 def transactions(request):
-    transactions = request.user.payments.all()
+    transactions = request.user.payments.all().order_by("-updated_at")
 
     context = {"transactions": transactions}
 
@@ -38,7 +40,7 @@ def due_payments(request):
 @require_POST
 def payment(request):
     # print("payment", request.POST)
-    url = "https://dev.khalti.com/api/v2/epayment/initiate/"
+    url = f"{settings.KHALTI_BASE_URL}{settings.KHALTI_INITIATE_URL}"
 
     try:
         new_payment = Payment.objects.create(
@@ -65,7 +67,7 @@ def payment(request):
         }
     )
     headers = {
-        "Authorization": "key your_api_key",
+        "Authorization": f"key {settings.KHALTI_SECRET}",
         "Content-Type": "application/json",
     }
 
@@ -76,5 +78,70 @@ def payment(request):
 
 
 def payment_done(request):
-    print("payment done")
-    # return render(request, "payment/payment-done.html")
+    # print("payment done")
+    query_params = request.GET
+    payment_id = query_params.get("purchase_order_id")
+    initial_payment_id = query_params.get("pidx")
+    status = query_params.get("status")  # if not "Completed" then failed
+    amount_in_paisa = int(query_params.get("amount"))
+    total_amount_in_paisa = query_params.get("total_amount")
+    payment_name = query_params.get("purchase_order_name")
+    phone_number = query_params.get("mobile")
+    khalti_transaction_id = query_params.get("transaction_id")
+
+    # print("-----------request.GET-------------")
+    # print(request.GET)
+    # print("-----------request.GET-------------")
+
+    verification_url = f"{settings.KHALTI_BASE_URL}{settings.KHALTI_LOOKUP_URL}"
+
+    payload = json.dumps({"pidx": initial_payment_id})
+    headers = {
+        "Authorization": f"key {settings.KHALTI_SECRET}",
+        "Content-Type": "application/json",
+    }
+
+    response = requests.request("POST", verification_url, headers=headers, data=payload)
+
+    result = response.json()
+    # print("-----------result-------------")
+    # print(result)
+    # print("-----------result-------------")
+    try:
+        payment = Payment.objects.get(id=payment_id)  # get the payment object
+    except Exception as e:  # if anything wrong happens while getting the payment object
+        print(e)
+        messages.error(request, "Payment details not found")
+        return redirect("payment:due_payments")
+
+    if (  # verification of payment response from khalti with lookup/verification api of khalti
+        result["status"] == status
+        and result["total_amount"] == amount_in_paisa
+        and result["transaction_id"] == khalti_transaction_id
+    ):
+        if (
+            (payment.amount * 100) == result["total_amount"]
+        ):  # if amount is not modified by middleman, amount *100, is equal to total_amount
+            if result["status"] == "Completed":
+                payment.status = Payment.Status.SUCCESS
+            elif result["status"] in ("Expired", "Failed", "User canceled"):
+                payment.status = Payment.Status.FAILED
+            else:
+                payment.status = Payment.Status.PENDING
+
+            payment.khalti_status = result["status"]
+            payment.khalti_transaction_id = result["transaction_id"]
+            payment.initial_khalti_id = result["pidx"]
+            payment.save()  # save the payment object with latest khalti details
+        else:
+            messages.error(request, "Payment amount verification failed")
+            return redirect(
+                "payment:due_payments"
+            )  # redirect to due payments page if payment amount is modified by middleman
+    else:
+        messages.error(request, "Payment details verification failed")
+        payment.status = Payment.Status.FAILED
+        payment.save()
+        return redirect("payment:due_payments")
+
+    return redirect("payment:transactions")

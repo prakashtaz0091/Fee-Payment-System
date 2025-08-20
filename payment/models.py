@@ -7,6 +7,7 @@ class Payment(models.Model):
         INITIATED = "INITIATED", "Initiated"
         SUCCESS = "SUCCESS", "Success"
         FAILED = "FAILED", "Failed"
+        PENDING = "PENDING", "Pending"
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
@@ -22,12 +23,25 @@ class Payment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    # khalti infos
+    initial_khalti_id = models.CharField(
+        max_length=255, null=True, blank=True, editable=False
+    )
+    khalti_status = models.CharField(
+        max_length=50, null=True, blank=True, editable=False
+    )
+    khalti_transaction_id = models.CharField(
+        max_length=255, null=True, blank=True, editable=False
+    )
+
     def __str__(self):
         return self.name
 
     def save(self, *args, **kwargs):
         if not self.name:  # only set name if it's not already provided
             # Count how many payments this student has already made in this grade
-            previous_count = Payment.objects.filter(student=self.student).count()
+            previous_count = Payment.objects.filter(
+                student=self.student, status=Payment.Status.SUCCESS
+            ).count()
             self.name = f"Installment {previous_count + 1}"
         super().save(*args, **kwargs)
