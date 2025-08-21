@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     "school",
     "django_filters",
     "payment",
+    "rest_framework",
 ]
 
 TAILWIND_APP_NAME = "theme"
