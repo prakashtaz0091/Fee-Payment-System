@@ -8,6 +8,7 @@ from django.urls import reverse
 from payment.models import Payment
 from django.contrib import messages
 from django.conf import settings
+from payment import signals
 
 
 def transactions(request):

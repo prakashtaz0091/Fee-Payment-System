@@ -43,6 +43,10 @@ Student Page
         <a href="{% url 'payment:due_payments' %}" class="btn btn-accent btn-wide">
             ⚠️ Check Due Payments
         </a>
+
     </div>
+    <a class="btn btn-outline" href="{% url 'accounts:logout_view' %}">
+        Logout
+    </a>
 </div>
 {% endblock %}
