@@ -4,6 +4,7 @@ from accounts.models import CustomUser
 from payment.models import Payment
 from school.models import Grade
 from django.db import models
+from dashboard_api.utils import get_payment_chart_data
 
 
 @api_view(["GET"])
@@ -26,11 +27,18 @@ def dashboard_data(request):
 
     active_classes = Grade.objects.filter(school=request.user.school).count()
 
+    chart_data = get_payment_chart_data(request.user)
+    chart = {
+        "labels": chart_data["labels"],
+        "datasets": chart_data["datasets"],
+    }
+
     data = {
         "total_students_school": total_students_school,
         "total_payments": total_payment_amount,
         "pending_payment_amount": pending_payment_amount,
         "active_classes": active_classes,
+        "chart": chart,
     }
 
     return Response(data)
