@@ -1,4 +1,6 @@
 from pathlib import Path
+from decouple import config
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -8,7 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-7dobepc79+)-6(0vsshnsru6(_4&c1huf-c1#5sse8!x8^opmp"
+SECRET_KEY = config("DJANGO_SECRET")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -33,6 +35,8 @@ INSTALLED_APPS = [
     "common",
     "school",
     "django_filters",
+    "payment",
+    "rest_framework",
 ]
 
 TAILWIND_APP_NAME = "theme"
@@ -139,3 +143,9 @@ DEFAULT_FROM_EMAIL = "fee-payment-system@localhost"  # Default sender email
 
 
 MAX_ATTEMPTS = 3
+
+
+KHALTI_SECRET = config("KHALTI_SECRET")
+KHALTI_BASE_URL = config("KHALTI_BASE_URL")
+KHALTI_INITIATE_URL = config("KHALTI_INITIATE_URL")
+KHALTI_LOOKUP_URL = config("KHALTI_LOOKUP_URL")

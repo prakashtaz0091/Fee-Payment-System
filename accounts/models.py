@@ -17,7 +17,11 @@ class CustomUser(AbstractUser):
         default=Roles.SCHOOL_ADMIN,
     )
     grade = models.ForeignKey(
-        "school.Grade", on_delete=models.SET_NULL, null=True, blank=True
+        "school.Grade",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="students",
     )
     stu_visible_pass = models.CharField(max_length=50, null=True, blank=True)
 
